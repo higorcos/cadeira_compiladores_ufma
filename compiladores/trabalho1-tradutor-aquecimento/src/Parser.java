@@ -22,6 +22,8 @@ public class Parser {
     private void stmt() {
         if (current.type == TokenType.LET) {
             letStmt();
+        } else if (current.type == TokenType.PRINT) {
+            printStmt();
         } else {
             throw new RuntimeException("Comando invalido, encontrado " + current.type);
         }
@@ -34,6 +36,13 @@ public class Parser {
         expr();
         expect(TokenType.SEMICOLON);
         System.out.println("pop " + id);
+    }
+
+    private void printStmt() {
+        expect(TokenType.PRINT);
+        expr();
+        expect(TokenType.SEMICOLON);
+        System.out.println("print");
     }
 
     private void expr() {

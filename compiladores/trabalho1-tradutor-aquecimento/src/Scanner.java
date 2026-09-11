@@ -67,6 +67,9 @@ public class Scanner {
         if (text.equals("let")) {
             return new Token(TokenType.LET, text);
         }
+        if (text.equals("print")) {
+            return new Token(TokenType.PRINT, text);
+        }
         return new Token(TokenType.ID, text);
     }
 
