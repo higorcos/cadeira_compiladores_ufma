@@ -1,6 +1,10 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Parser {
 
     private final Scanner scanner;
+    private final List<String> program = new ArrayList<>();
     private Token current;
 
     public Parser(Scanner scanner) {
@@ -8,9 +12,10 @@ public class Parser {
         this.current = scanner.nextToken();
     }
 
-    public void run() {
+    public List<String> translate() {
         stmtList();
         expectType(TokenType.EOF);
+        return program;
     }
 
     private void stmtList() {
@@ -35,14 +40,14 @@ public class Parser {
         expect(TokenType.EQUALS);
         expr();
         expect(TokenType.SEMICOLON);
-        System.out.println("pop " + id);
+        emit("pop " + id);
     }
 
     private void printStmt() {
         expect(TokenType.PRINT);
         expr();
         expect(TokenType.SEMICOLON);
-        System.out.println("print");
+        emit("print");
     }
 
     private void expr() {
@@ -51,11 +56,11 @@ public class Parser {
             if (current.type == TokenType.PLUS) {
                 advance();
                 factor();
-                System.out.println("add");
+                emit("add");
             } else {
                 advance();
                 factor();
-                System.out.println("sub");
+                emit("sub");
             }
         }
     }
@@ -64,13 +69,17 @@ public class Parser {
         if (current.type == TokenType.NUMBER) {
             String number = expect(TokenType.NUMBER);
             Integer.parseInt(number);
-            System.out.println("push " + number);
+            emit("push " + number);
         } else if (current.type == TokenType.ID) {
             String id = expect(TokenType.ID);
-            System.out.println("push " + id);
+            emit("push " + id);
         } else {
             throw new RuntimeException("Esperado NUMBER ou ID, encontrado " + current.type);
         }
+    }
+
+    private void emit(String instruction) {
+        program.add(instruction);
     }
 
     private String expect(TokenType type) {
