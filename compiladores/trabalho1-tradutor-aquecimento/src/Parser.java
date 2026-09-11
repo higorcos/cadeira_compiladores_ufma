@@ -10,7 +10,7 @@ public class Parser {
 
     public void run() {
         expr();
-        expect(TokenType.EOF);
+        expectType(TokenType.EOF);
     }
 
     private void expr() {
@@ -29,12 +29,19 @@ public class Parser {
     }
 
     private void factor() {
-        expect(TokenType.NUMBER);
-        System.out.println("push " + current.text);
-        advance();
+        String number = expect(TokenType.NUMBER);
+        Integer.parseInt(number);
+        System.out.println("push " + number);
     }
 
-    private void expect(TokenType type) {
+    private String expect(TokenType type) {
+        expectType(type);
+        String text = current.text;
+        advance();
+        return text;
+    }
+
+    private void expectType(TokenType type) {
         if (current.type != type) {
             throw new RuntimeException("Esperado " + type + ", encontrado " + current.type);
         }
