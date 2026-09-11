@@ -18,8 +18,7 @@ public class Scanner {
         char c = source.charAt(pos);
 
         if (Character.isDigit(c)) {
-            pos++;
-            return new Token(TokenType.NUMBER, String.valueOf(c));
+            return number();
         }
 
         if (c == '+') {
@@ -33,6 +32,15 @@ public class Scanner {
         }
 
         throw new RuntimeException("Caractere inesperado: " + c);
+    }
+
+    private Token number() {
+        StringBuilder sb = new StringBuilder();
+        while (pos < source.length() && Character.isDigit(source.charAt(pos))) {
+            sb.append(source.charAt(pos));
+            pos++;
+        }
+        return new Token(TokenType.NUMBER, sb.toString());
     }
 
     private void skipWhitespace() {
