@@ -5,6 +5,8 @@ public enum TokenType {
     PRINT,
     PLUS,
     MINUS,
+    STAR,
+    SLASH,
     EQUALS,
     SEMICOLON,
     EOF

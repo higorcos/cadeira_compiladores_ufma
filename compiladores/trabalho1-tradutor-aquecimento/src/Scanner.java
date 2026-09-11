@@ -35,6 +35,16 @@ public class Scanner {
             return new Token(TokenType.MINUS, "-");
         }
 
+        if (c == '*') {
+            pos++;
+            return new Token(TokenType.STAR, "*");
+        }
+
+        if (c == '/') {
+            pos++;
+            return new Token(TokenType.SLASH, "/");
+        }
+
         if (c == '=') {
             pos++;
             return new Token(TokenType.EQUALS, "=");

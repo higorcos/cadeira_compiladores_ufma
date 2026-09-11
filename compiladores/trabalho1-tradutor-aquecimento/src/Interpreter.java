@@ -35,6 +35,16 @@ public class Interpreter {
                 int a = stack.pop();
                 stack.push(a - b);
             }
+            case "mul" -> {
+                int b = stack.pop();
+                int a = stack.pop();
+                stack.push(a * b);
+            }
+            case "div" -> {
+                int b = stack.pop();
+                int a = stack.pop();
+                stack.push(a / b);
+            }
             case "print" -> System.out.println(stack.pop());
             default -> throw new RuntimeException("Instrucao desconhecida: " + instruction);
         }

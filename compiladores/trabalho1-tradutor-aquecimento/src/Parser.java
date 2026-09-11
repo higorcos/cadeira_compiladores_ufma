@@ -51,16 +51,31 @@ public class Parser {
     }
 
     private void expr() {
-        factor();
+        term();
         while (current.type == TokenType.PLUS || current.type == TokenType.MINUS) {
             if (current.type == TokenType.PLUS) {
                 advance();
-                factor();
+                term();
                 emit("add");
             } else {
                 advance();
-                factor();
+                term();
                 emit("sub");
+            }
+        }
+    }
+
+    private void term() {
+        factor();
+        while (current.type == TokenType.STAR || current.type == TokenType.SLASH) {
+            if (current.type == TokenType.STAR) {
+                advance();
+                factor();
+                emit("mul");
+            } else {
+                advance();
+                factor();
+                emit("div");
             }
         }
     }
