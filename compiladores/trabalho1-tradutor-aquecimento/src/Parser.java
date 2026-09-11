@@ -9,8 +9,31 @@ public class Parser {
     }
 
     public void run() {
-        expr();
+        stmtList();
         expectType(TokenType.EOF);
+    }
+
+    private void stmtList() {
+        while (current.type != TokenType.EOF) {
+            stmt();
+        }
+    }
+
+    private void stmt() {
+        if (current.type == TokenType.LET) {
+            letStmt();
+        } else {
+            throw new RuntimeException("Comando invalido, encontrado " + current.type);
+        }
+    }
+
+    private void letStmt() {
+        expect(TokenType.LET);
+        String id = expect(TokenType.ID);
+        expect(TokenType.EQUALS);
+        expr();
+        expect(TokenType.SEMICOLON);
+        System.out.println("pop " + id);
     }
 
     private void expr() {
@@ -29,9 +52,16 @@ public class Parser {
     }
 
     private void factor() {
-        String number = expect(TokenType.NUMBER);
-        Integer.parseInt(number);
-        System.out.println("push " + number);
+        if (current.type == TokenType.NUMBER) {
+            String number = expect(TokenType.NUMBER);
+            Integer.parseInt(number);
+            System.out.println("push " + number);
+        } else if (current.type == TokenType.ID) {
+            String id = expect(TokenType.ID);
+            System.out.println("push " + id);
+        } else {
+            throw new RuntimeException("Esperado NUMBER ou ID, encontrado " + current.type);
+        }
     }
 
     private String expect(TokenType type) {

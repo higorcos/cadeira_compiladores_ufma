@@ -21,6 +21,10 @@ public class Scanner {
             return number();
         }
 
+        if (Character.isLetter(c)) {
+            return identifier();
+        }
+
         if (c == '+') {
             pos++;
             return new Token(TokenType.PLUS, "+");
@@ -29,6 +33,16 @@ public class Scanner {
         if (c == '-') {
             pos++;
             return new Token(TokenType.MINUS, "-");
+        }
+
+        if (c == '=') {
+            pos++;
+            return new Token(TokenType.EQUALS, "=");
+        }
+
+        if (c == ';') {
+            pos++;
+            return new Token(TokenType.SEMICOLON, ";");
         }
 
         throw new RuntimeException("Caractere inesperado: " + c);
@@ -41,6 +55,19 @@ public class Scanner {
             pos++;
         }
         return new Token(TokenType.NUMBER, sb.toString());
+    }
+
+    private Token identifier() {
+        StringBuilder sb = new StringBuilder();
+        while (pos < source.length() && Character.isLetterOrDigit(source.charAt(pos))) {
+            sb.append(source.charAt(pos));
+            pos++;
+        }
+        String text = sb.toString();
+        if (text.equals("let")) {
+            return new Token(TokenType.LET, text);
+        }
+        return new Token(TokenType.ID, text);
     }
 
     private void skipWhitespace() {
