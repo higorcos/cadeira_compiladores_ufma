@@ -19,18 +19,18 @@ public class Parser {
     }
 
     private void stmtList() {
-        while (current.type != TokenType.EOF) {
+        while (current.type() != TokenType.EOF) {
             stmt();
         }
     }
 
     private void stmt() {
-        if (current.type == TokenType.LET) {
+        if (current.type() == TokenType.LET) {
             letStmt();
-        } else if (current.type == TokenType.PRINT) {
+        } else if (current.type() == TokenType.PRINT) {
             printStmt();
         } else {
-            throw new RuntimeException("Comando invalido, encontrado " + current.type);
+            throw new RuntimeException("Comando invalido, encontrado " + current.type());
         }
     }
 
@@ -52,8 +52,8 @@ public class Parser {
 
     private void expr() {
         term();
-        while (current.type == TokenType.PLUS || current.type == TokenType.MINUS) {
-            TokenType operator = current.type;
+        while (current.type() == TokenType.PLUS || current.type() == TokenType.MINUS) {
+            TokenType operator = current.type();
             advance();
             term();
             emit(operator == TokenType.PLUS ? "add" : "sub");
@@ -62,8 +62,8 @@ public class Parser {
 
     private void term() {
         factor();
-        while (current.type == TokenType.STAR || current.type == TokenType.SLASH) {
-            TokenType operator = current.type;
+        while (current.type() == TokenType.STAR || current.type() == TokenType.SLASH) {
+            TokenType operator = current.type();
             advance();
             factor();
             emit(operator == TokenType.STAR ? "mul" : "div");
@@ -71,14 +71,14 @@ public class Parser {
     }
 
     private void factor() {
-        if (current.type == TokenType.NUMBER) {
+        if (current.type() == TokenType.NUMBER) {
             String number = expect(TokenType.NUMBER);
             Integer.parseInt(number);
             emit("push " + number);
-        } else if (current.type == TokenType.ID) {
+        } else if (current.type() == TokenType.ID) {
             emit("push " + expect(TokenType.ID));
         } else {
-            throw new RuntimeException("Esperado NUMBER ou ID, encontrado " + current.type);
+            throw new RuntimeException("Esperado NUMBER ou ID, encontrado " + current.type());
         }
     }
 
@@ -88,14 +88,14 @@ public class Parser {
 
     private String expect(TokenType type) {
         expectType(type);
-        String text = current.text;
+        String text = current.text();
         advance();
         return text;
     }
 
     private void expectType(TokenType type) {
-        if (current.type != type) {
-            throw new RuntimeException("Esperado " + type + ", encontrado " + current.type);
+        if (current.type() != type) {
+            throw new RuntimeException("Esperado " + type + ", encontrado " + current.type());
         }
     }
 
