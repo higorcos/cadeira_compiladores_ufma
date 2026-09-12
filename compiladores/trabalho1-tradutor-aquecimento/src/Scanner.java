@@ -25,37 +25,19 @@ public class Scanner {
             return identifier();
         }
 
-        if (c == '+') {
-            pos++;
-            return new Token(TokenType.PLUS, "+");
-        }
-
-        if (c == '-') {
-            pos++;
-            return new Token(TokenType.MINUS, "-");
-        }
-
-        if (c == '*') {
-            pos++;
-            return new Token(TokenType.STAR, "*");
-        }
-
-        if (c == '/') {
-            pos++;
-            return new Token(TokenType.SLASH, "/");
-        }
-
-        if (c == '=') {
-            pos++;
-            return new Token(TokenType.EQUALS, "=");
-        }
-
-        if (c == ';') {
-            pos++;
-            return new Token(TokenType.SEMICOLON, ";");
-        }
+        if (c == '+') return symbol(TokenType.PLUS, c);
+        if (c == '-') return symbol(TokenType.MINUS, c);
+        if (c == '*') return symbol(TokenType.STAR, c);
+        if (c == '/') return symbol(TokenType.SLASH, c);
+        if (c == '=') return symbol(TokenType.EQUALS, c);
+        if (c == ';') return symbol(TokenType.SEMICOLON, c);
 
         throw new RuntimeException("Caractere inesperado: " + c);
+    }
+
+    private Token symbol(TokenType type, char c) {
+        pos++;
+        return new Token(type, String.valueOf(c));
     }
 
     private Token number() {
