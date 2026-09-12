@@ -53,30 +53,20 @@ public class Parser {
     private void expr() {
         term();
         while (current.type == TokenType.PLUS || current.type == TokenType.MINUS) {
-            if (current.type == TokenType.PLUS) {
-                advance();
-                term();
-                emit("add");
-            } else {
-                advance();
-                term();
-                emit("sub");
-            }
+            TokenType operator = current.type;
+            advance();
+            term();
+            emit(operator == TokenType.PLUS ? "add" : "sub");
         }
     }
 
     private void term() {
         factor();
         while (current.type == TokenType.STAR || current.type == TokenType.SLASH) {
-            if (current.type == TokenType.STAR) {
-                advance();
-                factor();
-                emit("mul");
-            } else {
-                advance();
-                factor();
-                emit("div");
-            }
+            TokenType operator = current.type;
+            advance();
+            factor();
+            emit(operator == TokenType.STAR ? "mul" : "div");
         }
     }
 
@@ -86,8 +76,7 @@ public class Parser {
             Integer.parseInt(number);
             emit("push " + number);
         } else if (current.type == TokenType.ID) {
-            String id = expect(TokenType.ID);
-            emit("push " + id);
+            emit("push " + expect(TokenType.ID));
         } else {
             throw new RuntimeException("Esperado NUMBER ou ID, encontrado " + current.type);
         }
