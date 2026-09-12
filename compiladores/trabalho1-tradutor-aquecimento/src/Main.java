@@ -7,9 +7,7 @@ public class Main {
         Parser parser = new Parser(scanner);
         List<String> program = parser.translate();
 
-        for (String instruction : program) {
-            System.out.println(instruction);
-        }
+        System.out.println(String.join("\n", program));
         System.out.println("---");
 
         Interpreter interpreter = new Interpreter(program);

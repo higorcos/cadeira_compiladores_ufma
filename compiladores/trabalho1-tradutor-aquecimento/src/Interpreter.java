@@ -3,6 +3,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.IntBinaryOperator;
 
 public class Interpreter {
 
@@ -25,29 +26,19 @@ public class Interpreter {
         switch (parts[0]) {
             case "push" -> stack.push(valueOf(parts[1]));
             case "pop" -> variables.put(parts[1], stack.pop());
-            case "add" -> {
-                int b = stack.pop();
-                int a = stack.pop();
-                stack.push(a + b);
-            }
-            case "sub" -> {
-                int b = stack.pop();
-                int a = stack.pop();
-                stack.push(a - b);
-            }
-            case "mul" -> {
-                int b = stack.pop();
-                int a = stack.pop();
-                stack.push(a * b);
-            }
-            case "div" -> {
-                int b = stack.pop();
-                int a = stack.pop();
-                stack.push(a / b);
-            }
+            case "add" -> applyBinary((a, b) -> a + b);
+            case "sub" -> applyBinary((a, b) -> a - b);
+            case "mul" -> applyBinary((a, b) -> a * b);
+            case "div" -> applyBinary((a, b) -> a / b);
             case "print" -> System.out.println(stack.pop());
             default -> throw new RuntimeException("Instrucao desconhecida: " + instruction);
         }
+    }
+
+    private void applyBinary(IntBinaryOperator operator) {
+        int b = stack.pop();
+        int a = stack.pop();
+        stack.push(operator.applyAsInt(a, b));
     }
 
     private int valueOf(String token) {
